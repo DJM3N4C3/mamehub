@@ -25,12 +25,12 @@
 
     #overlay {
       position: fixed;
-      top: 50%;
+      top: calc(83.33% - 20px);        /* Center of lower third, moved up 20px */
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 9999;
-      max-width: 90vw;
-      max-height: 90vh;
+      max-width: 59.4vw;               /* 10% larger than 54vw */
+      max-height: 59.4vh;              /* 10% larger than 54vh */
       display: none;
     }
 
@@ -38,7 +38,7 @@
       display: block;
       width: 100%;
       height: auto;
-      max-width: 600px;
+      max-width: 396px;                /* 10% larger than 360px */
       pointer-events: none;
     }
 
@@ -80,7 +80,6 @@
     EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
     EJS_startOnLoaded = true;
 
-    // Official way to set default controls
     EJS_defaultControls = {
       0: { // Player 1
         0: { value: 'j', value2: 'BUTTON_1' },      // J = JUMP (Button 1)
@@ -101,7 +100,6 @@
       3: {}
     };
 
-    // Show overlay after 5 seconds
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.getElementById('overlay').style.display = 'block';
