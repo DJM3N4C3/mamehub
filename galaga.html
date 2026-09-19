@@ -11,6 +11,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
     }
     #game {
       width: 800px;
@@ -24,12 +25,26 @@
   <div id="game"></div>
 
   <script>
-    // Emulator settings
     EJS_player = '#game';
-    EJS_core = 'arcade';               // or try 'mame2003' if arcade doesn't work well
-    EJS_gameUrl = 'galaga.zip';        // name of your ROM file
+    EJS_core = 'arcade';                  // try 'mame2003' if this one has issues
+    EJS_gameUrl = 'galaga.zip';
     EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
-    EJS_startOnLoaded = true;          // auto start
+    EJS_startOnLoaded = true;
+
+    // Custom controls
+    EJS_Buttons = {
+      "0": { // Player 1
+        "up": "KeyW",
+        "down": "KeyS",
+        "left": "KeyA",
+        "right": "KeyD",
+        "a": "KeyJ",      // Main fire
+        "b": "KeyK",      // Extra button
+        "c": "KeyL",      // Extra button
+        "start": "Digit1",
+        "select": "Digit5" // Insert coin
+      }
+    };
   </script>
 
   <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
