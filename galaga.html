@@ -31,13 +31,14 @@
       z-index: 9999;
       max-width: 90vw;
       max-height: 90vh;
+      display: none; /* hidden at start */
     }
 
     #overlay img {
       display: block;
       width: 100%;
       height: auto;
-      max-width: 900px;
+      max-width: 720px; /* 20% smaller than 900px */
       pointer-events: none;
     }
 
@@ -90,24 +91,29 @@
         "a": "KeyJ",
         "b": "KeyK",
         "c": "KeyL",
-        "start": "Digit1",
-        "select": "Digit5"
+        "start": "Enter",
+        "select": "KeyV"
       }
     };
 
+    // Show overlay after 10 seconds
     window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('overlay').style.display = 'block';
+      }, 10000); // 10 seconds
+
+      // Try fullscreen
       setTimeout(() => {
         document.documentElement.requestFullscreen?.().catch(() => {});
       }, 1000);
     });
 
     function insertCoin() {
-      // Stronger key simulation for coin
-      pressKey('5', 'Digit5', 53);
+      pressKey('v', 'KeyV', 86);
     }
 
     function startGame() {
-      pressKey('1', 'Digit1', 49);
+      pressKey('Enter', 'Enter', 13);
       document.getElementById('overlay').style.display = 'none';
     }
 
@@ -124,14 +130,13 @@
       const down = new KeyboardEvent('keydown', opts);
       const up = new KeyboardEvent('keyup', opts);
 
-      // Send to both document and the game element
       document.dispatchEvent(down);
       document.getElementById('game').dispatchEvent(down);
 
       setTimeout(() => {
         document.dispatchEvent(up);
         document.getElementById('game').dispatchEvent(up);
-      }, 120);
+      }, 100);
     }
   </script>
 
