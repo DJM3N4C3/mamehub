@@ -15,6 +15,7 @@
       height: 100%;
       background: #000;
       overflow: hidden;
+      cursor: crosshair;
     }
 
     #game {
@@ -31,14 +32,14 @@
       z-index: 9999;
       max-width: 90vw;
       max-height: 90vh;
-      display: none; /* hidden at start */
+      display: none;
     }
 
     #overlay img {
       display: block;
       width: 100%;
       height: auto;
-      max-width: 720px; /* 20% smaller than 900px */
+      max-width: 720px;
       pointer-events: none;
     }
 
@@ -48,7 +49,6 @@
       background: transparent;
     }
 
-    /* ADD CREDITS */
     #btn-credits {
       top: 18%;
       left: 8%;
@@ -56,7 +56,6 @@
       height: 52%;
     }
 
-    /* START GAME */
     #btn-start {
       top: 18%;
       right: 8%;
@@ -100,9 +99,8 @@
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.getElementById('overlay').style.display = 'block';
-      }, 10000); // 10 seconds
+      }, 10000);
 
-      // Try fullscreen
       setTimeout(() => {
         document.documentElement.requestFullscreen?.().catch(() => {});
       }, 1000);
@@ -136,7 +134,78 @@
       setTimeout(() => {
         document.dispatchEvent(up);
         document.getElementById('game').dispatchEvent(up);
-      }, 100);
+      }, 80);
+    }
+
+    // ===== MOUSE CONTROLS =====
+    let lastX = null;
+    let isMovingLeft = false;
+    let isMovingRight = false;
+
+    document.addEventListener('mousemove', (e) => {
+      if (lastX === null) {
+        lastX = e.clientX;
+        return;
+      }
+
+      const diff = e.clientX - lastX;
+
+      if (diff < -3) {
+        // Moving left
+        if (!isMovingLeft) {
+          pressKeyDown('a', 'KeyA', 65);
+          isMovingLeft = true;
+          isMovingRight = false;
+        }
+      } else if (diff > 3) {
+        // Moving right
+        if (!isMovingRight) {
+          pressKeyDown('d', 'KeyD', 68);
+          isMovingRight = true;
+          isMovingLeft = false;
+        }
+      }
+
+      lastX = e.clientX;
+    });
+
+    // Stop movement when mouse stops
+    let moveTimeout;
+    document.addEventListener('mousemove', () => {
+      clearTimeout(moveTimeout);
+      moveTimeout = setTimeout(() => {
+        releaseMovement();
+      }, 50);
+    });
+
+    function releaseMovement() {
+      if (isMovingLeft) {
+        pressKeyUp('a', 'KeyA', 65);
+        isMovingLeft = false;
+      }
+      if (isMovingRight) {
+        pressKeyUp('d', 'KeyD', 68);
+        isMovingRight = false;
+      }
+    }
+
+    // Left click = Fire
+    document.addEventListener('mousedown', (e) => {
+      if (e.button === 0) { // left click
+        pressKey('j', 'KeyJ', 74);
+      }
+    });
+
+    function pressKeyDown(key, code, keyCode) {
+      const opts = { key, code, keyCode, which: keyCode, bubbles: true };
+      document.dispatchEvent(new KeyboardEvent('keydown', opts));
+      document.getElementById('game').dispatchEvent(new KeyboardEvent('keydown', opts));
+    }
+
+    function pressKeyUp(key, code, keyCode) {
+      const opts = { key, code, keyCode, which: keyCode, bubbles: true };
+      document.dispatchEvent(new KeyboardEvent('keyup', opts));
+      document.getElementById('game').dispatchEvent(new KeyboardEvent('keyup', opts));
     }
   </script>
 
