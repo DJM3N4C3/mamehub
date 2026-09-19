@@ -23,7 +23,6 @@
       background: #000;
     }
 
-    /* Custom Overlay */
     #overlay {
       position: fixed;
       top: 50%;
@@ -39,17 +38,16 @@
       width: 100%;
       height: auto;
       max-width: 900px;
-      pointer-events: none; /* image itself is not clickable */
+      pointer-events: none;
     }
 
-    /* Invisible click areas */
     .hotspot {
       position: absolute;
       cursor: pointer;
       background: transparent;
     }
 
-    /* ADD CREDITS (left gold coin) */
+    /* ADD CREDITS */
     #btn-credits {
       top: 18%;
       left: 8%;
@@ -57,7 +55,7 @@
       height: 52%;
     }
 
-    /* START GAME (right red button) */
+    /* START GAME */
     #btn-start {
       top: 18%;
       right: 8%;
@@ -70,11 +68,8 @@
 
   <div id="game"></div>
 
-  <!-- Custom Overlay -->
   <div id="overlay">
     <img src="Overlay.png" alt="Overlay">
-
-    <!-- Clickable zones -->
     <div id="btn-credits" class="hotspot" onclick="insertCoin()"></div>
     <div id="btn-start" class="hotspot" onclick="startGame()"></div>
   </div>
@@ -100,27 +95,43 @@
       }
     };
 
-    // Try fullscreen
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.documentElement.requestFullscreen?.().catch(() => {});
-      }, 800);
+      }, 1000);
     });
 
     function insertCoin() {
-      simulateKey('Digit5');
+      // Stronger key simulation for coin
+      pressKey('5', 'Digit5', 53);
     }
 
     function startGame() {
-      simulateKey('Digit1');
+      pressKey('1', 'Digit1', 49);
       document.getElementById('overlay').style.display = 'none';
     }
 
-    function simulateKey(code) {
-      const down = new KeyboardEvent('keydown', { code, bubbles: true });
-      const up = new KeyboardEvent('keyup', { code, bubbles: true });
+    function pressKey(key, code, keyCode) {
+      const opts = {
+        key: key,
+        code: code,
+        keyCode: keyCode,
+        which: keyCode,
+        bubbles: true,
+        cancelable: true
+      };
+
+      const down = new KeyboardEvent('keydown', opts);
+      const up = new KeyboardEvent('keyup', opts);
+
+      // Send to both document and the game element
       document.dispatchEvent(down);
-      setTimeout(() => document.dispatchEvent(up), 80);
+      document.getElementById('game').dispatchEvent(down);
+
+      setTimeout(() => {
+        document.dispatchEvent(up);
+        document.getElementById('game').dispatchEvent(up);
+      }, 120);
     }
   </script>
 
