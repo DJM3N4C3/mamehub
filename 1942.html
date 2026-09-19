@@ -25,12 +25,12 @@
 
     #overlay {
       position: fixed;
-      top: 83.33%;                     /* Center of lower third */
+      top: calc(83.33% - 20px);        /* Center of lower third, moved up 20px */
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 9999;
-      max-width: 54vw;                 /* Was 90vw — 60% of previous */
-      max-height: 54vh;                /* Was 90vh — 60% of previous */
+      max-width: 59.4vw;               /* 10% larger than 54vw */
+      max-height: 59.4vh;              /* 10% larger than 54vh */
       display: none;
     }
 
@@ -38,7 +38,7 @@
       display: block;
       width: 100%;
       height: auto;
-      max-width: 360px;                /* Was 600px — 60% of previous */
+      max-width: 396px;                /* 10% larger than 360px */
       pointer-events: none;
     }
 
