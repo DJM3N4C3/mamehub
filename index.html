@@ -40,19 +40,16 @@
   /* ---- Grid coordinates (percentages of the image) ----
      Tweak these if any hotspot is a touch off. */
   :root {
-    /* Columns */
-    --c1: 3.0%;    /* left edge of column 1 */
-    --c2: 35.0%;   /* left edge of column 2 */
-    --c3: 67.0%;   /* left edge of column 3 */
-    --cw: 30.0%;   /* column width         */
-
+    /* Columns (unchanged — you said these are perfect) */
+    --c1: 3.0%;
+    --c2: 35.0%;
+    --c3: 67.0%;
+    --cw: 30.0%;
+  
     /* Rows */
-    --r1: 1.5%;    /* top edge of row 1 */
-    --r2: 21.5%;
-    --r3: 41.5%;
-    --r4: 61.5%;
-    --r5: 81.5%;
-    --rh: 18.5%;   /* row height */
+    --r1: 1.5%;    /* top of row 1 — you said this is perfect */
+    --rp: 19.1%;   /* row pitch (distance between row tops)  ← was 20% */
+    --rh: 18.5%;   /* row height                             ← unchanged */
   }
 
   /* Column + row utility classes */
@@ -61,10 +58,10 @@
   .c3 { left: var(--c3); }
 
   .r1 { top: var(--r1); }
-  .r2 { top: var(--r2); }
-  .r3 { top: var(--r3); }
-  .r4 { top: var(--r4); }
-  .r5 { top: var(--r5); }
+  .r2 { top: calc(var(--r1) + var(--rp)); }
+  .r3 { top: calc(var(--r1) + var(--rp) * 2); }
+  .r4 { top: calc(var(--r1) + var(--rp) * 3); }
+  .r5 { top: calc(var(--r1) + var(--rp) * 4); }
 
   /* The clickable hotspots */
   .hotspot {
