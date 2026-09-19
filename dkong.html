@@ -25,12 +25,12 @@
 
     #overlay {
       position: fixed;
-      top: 50%;
+      top: calc(83.33% - 80px);        /* Center of lower third, moved up 80px total */
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 9999;
-      max-width: 90vw;
-      max-height: 90vh;
+      max-width: 59.4vw;
+      max-height: 59.4vh;
       display: none;
     }
 
@@ -38,7 +38,7 @@
       display: block;
       width: 100%;
       height: auto;
-      max-width: 600px;
+      max-width: 396px;
       pointer-events: none;
     }
 
@@ -101,7 +101,7 @@
       3: {}
     };
 
-    // Show overlay after 10 seconds
+    // Show overlay after 5 seconds
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.getElementById('overlay').style.display = 'block';
