@@ -4,14 +4,17 @@
   <meta charset="utf-8">
   <title>Galaga - Original Arcade</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     html, body {
       width: 100%;
       height: 100%;
       background: #000;
       overflow: hidden;
-      cursor: crosshair;
     }
 
     #game {
@@ -77,6 +80,7 @@
     EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
     EJS_startOnLoaded = true;
 
+    // Trying to set custom keys (may be limited by the core)
     EJS_Buttons = {
       "0": {
         "up": "KeyW",
@@ -132,63 +136,6 @@
         document.getElementById('game')?.dispatchEvent(up);
       }, 80);
     }
-
-    // ===== IMPROVED MOUSE CONTROLS =====
-    let currentDirection = null; // 'left', 'right', or null
-
-    function sendKey(type, key, code, keyCode) {
-      const opts = {
-        key: key,
-        code: code,
-        keyCode: keyCode,
-        which: keyCode,
-        bubbles: true
-      };
-      const event = new KeyboardEvent(type, opts);
-      document.dispatchEvent(event);
-      document.getElementById('game')?.dispatchEvent(event);
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      const screenCenter = window.innerWidth / 2;
-      const mouseX = e.clientX;
-
-      if (mouseX < screenCenter - 40) {
-        // Move left
-        if (currentDirection !== 'left') {
-          if (currentDirection === 'right') {
-            sendKey('keyup', 'd', 'KeyD', 68);
-          }
-          sendKey('keydown', 'a', 'KeyA', 65);
-          currentDirection = 'left';
-        }
-      } else if (mouseX > screenCenter + 40) {
-        // Move right
-        if (currentDirection !== 'right') {
-          if (currentDirection === 'left') {
-            sendKey('keyup', 'a', 'KeyA', 65);
-          }
-          sendKey('keydown', 'd', 'KeyD', 68);
-          currentDirection = 'right';
-        }
-      } else {
-        // Center - stop moving
-        if (currentDirection === 'left') {
-          sendKey('keyup', 'a', 'KeyA', 65);
-        }
-        if (currentDirection === 'right') {
-          sendKey('keyup', 'd', 'KeyD', 68);
-        }
-        currentDirection = null;
-      }
-    });
-
-    // Left click = Fire
-    document.addEventListener('mousedown', (e) => {
-      if (e.button === 0) {
-        pressKey('j', 'KeyJ', 74);
-      }
-    });
   </script>
 
   <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
