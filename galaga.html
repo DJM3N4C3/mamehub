@@ -15,7 +15,6 @@
       height: 100%;
       background: #000;
       overflow: hidden;
-      font-family: Arial, sans-serif;
     }
 
     #game {
@@ -24,46 +23,46 @@
       background: #000;
     }
 
+    /* Custom Overlay */
     #overlay {
       position: fixed;
-      top: 20px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.85);
-      padding: 14px 22px;
-      border-radius: 10px;
-      color: white;
-      text-align: center;
+      transform: translate(-50%, -50%);
       z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
+      max-width: 90vw;
+      max-height: 90vh;
     }
 
-    .btn-row {
-      display: flex;
-      gap: 12px;
+    #overlay img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 900px;
+      pointer-events: none; /* image itself is not clickable */
     }
 
-    button {
-      background: #222;
-      color: white;
-      border: 2px solid #555;
-      padding: 9px 20px;
-      border-radius: 6px;
+    /* Invisible click areas */
+    .hotspot {
+      position: absolute;
       cursor: pointer;
-      font-size: 15px;
+      background: transparent;
     }
 
-    button:hover {
-      background: #444;
-      border-color: #888;
+    /* ADD CREDITS (left gold coin) */
+    #btn-credits {
+      top: 18%;
+      left: 8%;
+      width: 38%;
+      height: 52%;
     }
 
-    .controls-note {
-      font-size: 13px;
-      color: #ccc;
+    /* START GAME (right red button) */
+    #btn-start {
+      top: 18%;
+      right: 8%;
+      width: 38%;
+      height: 52%;
     }
   </style>
 </head>
@@ -71,14 +70,13 @@
 
   <div id="game"></div>
 
+  <!-- Custom Overlay -->
   <div id="overlay">
-    <div class="btn-row">
-      <button onclick="insertCoin()">Add Coin</button>
-      <button onclick="startGame()">Start</button>
-    </div>
-    <div class="controls-note">
-      Move: <b>W A S D</b> &nbsp;&nbsp;|&nbsp;&nbsp; Fire: <b>J K L</b>
-    </div>
+    <img src="Overlay.png" alt="Overlay">
+
+    <!-- Clickable zones -->
+    <div id="btn-credits" class="hotspot" onclick="insertCoin()"></div>
+    <div id="btn-start" class="hotspot" onclick="startGame()"></div>
   </div>
 
   <script>
@@ -102,6 +100,7 @@
       }
     };
 
+    // Try fullscreen
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.documentElement.requestFullscreen?.().catch(() => {});
