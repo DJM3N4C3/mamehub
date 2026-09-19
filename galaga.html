@@ -4,11 +4,7 @@
   <meta charset="utf-8">
   <title>Galaga - Original Arcade</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       width: 100%;
@@ -129,84 +125,70 @@
       const up = new KeyboardEvent('keyup', opts);
 
       document.dispatchEvent(down);
-      document.getElementById('game').dispatchEvent(down);
+      document.getElementById('game')?.dispatchEvent(down);
 
       setTimeout(() => {
         document.dispatchEvent(up);
-        document.getElementById('game').dispatchEvent(up);
+        document.getElementById('game')?.dispatchEvent(up);
       }, 80);
     }
 
-    // ===== MOUSE CONTROLS =====
-    let lastX = null;
-    let isMovingLeft = false;
-    let isMovingRight = false;
+    // ===== IMPROVED MOUSE CONTROLS =====
+    let currentDirection = null; // 'left', 'right', or null
+
+    function sendKey(type, key, code, keyCode) {
+      const opts = {
+        key: key,
+        code: code,
+        keyCode: keyCode,
+        which: keyCode,
+        bubbles: true
+      };
+      const event = new KeyboardEvent(type, opts);
+      document.dispatchEvent(event);
+      document.getElementById('game')?.dispatchEvent(event);
+    }
 
     document.addEventListener('mousemove', (e) => {
-      if (lastX === null) {
-        lastX = e.clientX;
-        return;
-      }
+      const screenCenter = window.innerWidth / 2;
+      const mouseX = e.clientX;
 
-      const diff = e.clientX - lastX;
-
-      if (diff < -3) {
-        // Moving left
-        if (!isMovingLeft) {
-          pressKeyDown('a', 'KeyA', 65);
-          isMovingLeft = true;
-          isMovingRight = false;
+      if (mouseX < screenCenter - 40) {
+        // Move left
+        if (currentDirection !== 'left') {
+          if (currentDirection === 'right') {
+            sendKey('keyup', 'd', 'KeyD', 68);
+          }
+          sendKey('keydown', 'a', 'KeyA', 65);
+          currentDirection = 'left';
         }
-      } else if (diff > 3) {
-        // Moving right
-        if (!isMovingRight) {
-          pressKeyDown('d', 'KeyD', 68);
-          isMovingRight = true;
-          isMovingLeft = false;
+      } else if (mouseX > screenCenter + 40) {
+        // Move right
+        if (currentDirection !== 'right') {
+          if (currentDirection === 'left') {
+            sendKey('keyup', 'a', 'KeyA', 65);
+          }
+          sendKey('keydown', 'd', 'KeyD', 68);
+          currentDirection = 'right';
         }
+      } else {
+        // Center - stop moving
+        if (currentDirection === 'left') {
+          sendKey('keyup', 'a', 'KeyA', 65);
+        }
+        if (currentDirection === 'right') {
+          sendKey('keyup', 'd', 'KeyD', 68);
+        }
+        currentDirection = null;
       }
-
-      lastX = e.clientX;
     });
-
-    // Stop movement when mouse stops
-    let moveTimeout;
-    document.addEventListener('mousemove', () => {
-      clearTimeout(moveTimeout);
-      moveTimeout = setTimeout(() => {
-        releaseMovement();
-      }, 50);
-    });
-
-    function releaseMovement() {
-      if (isMovingLeft) {
-        pressKeyUp('a', 'KeyA', 65);
-        isMovingLeft = false;
-      }
-      if (isMovingRight) {
-        pressKeyUp('d', 'KeyD', 68);
-        isMovingRight = false;
-      }
-    }
 
     // Left click = Fire
     document.addEventListener('mousedown', (e) => {
-      if (e.button === 0) { // left click
+      if (e.button === 0) {
         pressKey('j', 'KeyJ', 74);
       }
     });
-
-    function pressKeyDown(key, code, keyCode) {
-      const opts = { key, code, keyCode, which: keyCode, bubbles: true };
-      document.dispatchEvent(new KeyboardEvent('keydown', opts));
-      document.getElementById('game').dispatchEvent(new KeyboardEvent('keydown', opts));
-    }
-
-    function pressKeyUp(key, code, keyCode) {
-      const opts = { key, code, keyCode, which: keyCode, bubbles: true };
-      document.dispatchEvent(new KeyboardEvent('keyup', opts));
-      document.getElementById('game').dispatchEvent(new KeyboardEvent('keyup', opts));
-    }
   </script>
 
   <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
