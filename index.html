@@ -18,14 +18,15 @@
   }
 
   /* The stage holds the artwork and its hotspots.
-     It scales to fit the viewport while keeping the image's aspect ratio. */
+     It scales to fit the viewport while keeping the image's aspect ratio.
+     The "260px" reserves room on the left and right for the arrows. */
   #stage {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width:  min(100vw, calc(100vh * 0.7384));   /* 1084 / 1468 ≈ 0.7384 */
-    height: min(100vh, calc(100vw * 1.3542));   /* 1468 / 1084 ≈ 1.3542 */
+    width:  min(calc(100vw - 260px), calc(100vh * 0.7384));   /* 1084 / 1468 ≈ 0.7384 */
+    height: min(100vh, calc((100vw - 260px) * 1.3542));       /* 1468 / 1084 ≈ 1.3542 */
   }
 
   /* Artwork fills the stage */
@@ -37,19 +38,55 @@
     user-select: none;
   }
 
-  /* ---- Grid coordinates (percentages of the image) ----
-     Tweak these if any hotspot is a touch off. */
+  /* ---- Prev / Next neon arrows ---- */
+  .arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 110px;
+    z-index: 100;
+    cursor: pointer;
+    outline: none;
+    filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.45));
+    transition: filter 0.2s ease, transform 0.2s ease;
+  }
+
+  .arrow img {
+    display: block;
+    width: 100%;
+    height: auto;
+    pointer-events: none;      /* whole anchor is the click target */
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .arrow:hover,
+  .arrow:focus-visible {
+    filter:
+      drop-shadow(0 0 16px rgba(0, 255, 200, 0.95))
+      drop-shadow(0 0 38px rgba(0, 150, 255, 0.75));
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .arrow:active {
+    transform: translateY(-50%) scale(0.96);
+  }
+
+  .arrow-left  { left: 18px; }
+  .arrow-right { right: 18px; }
+
+  /* ---- Grid coordinates (percentages of the image) ---- */
   :root {
-    /* Columns (unchanged — you said these are perfect) */
+    /* Columns */
     --c1: 3.0%;
     --c2: 35.0%;
     --c3: 67.0%;
     --cw: 30.0%;
-  
+
     /* Rows */
-    --r1: 1.5%;    /* top of row 1 — you said this is perfect */
-    --rp: 19.1%;   /* row pitch (distance between row tops)  ← was 20% */
-    --rh: 18.5%;   /* row height                             ← unchanged */
+    --r1: 1.5%;    /* top of row 1 */
+    --rp: 19.1%;   /* row pitch (distance between row tops) */
+    --rh: 18.5%;   /* row height */
   }
 
   /* Column + row utility classes */
@@ -76,7 +113,6 @@
     z-index: 10;
   }
 
-  /* Arcade-style glow on hover/focus */
   .hotspot:hover,
   .hotspot:focus-visible {
     background: rgba(0, 200, 255, 0.12);
@@ -87,16 +123,25 @@
     outline: none;
   }
 
-  /* Brief "press" feedback */
   .hotspot:active {
     background: rgba(0, 200, 255, 0.25);
+  }
+
+  /* Narrow screens: shrink arrows and tighten the reserved space */
+  @media (max-width: 700px) {
+    #stage {
+      width:  min(calc(100vw - 150px), calc(100vh * 0.7384));
+      height: min(100vh, calc((100vw - 150px) * 1.3542));
+    }
+    .arrow { width: 60px; }
+    .arrow-left  { left: 8px; }
+    .arrow-right { right: 8px; }
   }
 </style>
 </head>
 <body>
 
   <div id="stage">
-    <!-- Rename this file if your artwork has a different name -->
     <img src="Main.png" alt="MAME Hub — Arcade Game Selector">
 
     <!-- Row 1 -->
@@ -112,18 +157,31 @@
     <!-- Row 3 -->
     <a class="hotspot r3 c1" href="dkong.html"     aria-label="Donkey Kong"></a>
     <a class="hotspot r3 c2" href="dk3.html"       aria-label="Donkey Kong 3"></a>
-    <a class="hotspot r3 c3" href="dkjr.html"   aria-label="Donkey Kong Jr."></a>
+    <a class="hotspot r3 c3" href="dkjr.html"      aria-label="Donkey Kong Jr."></a>
 
     <!-- Row 4 -->
     <a class="hotspot r4 c1" href="frogger.html"   aria-label="Frogger"></a>
     <a class="hotspot r4 c2" href="galaga.html"    aria-label="Galaga"></a>
-    <a class="hotspot r4 c3" href="mpac.html"  aria-label="Ms. Pac-Man"></a>
+    <a class="hotspot r4 c3" href="mpac.html"      aria-label="Ms. Pac-Man"></a>
 
     <!-- Row 5 -->
     <a class="hotspot r5 c1" href="pacman.html"    aria-label="Pac-Man"></a>
     <a class="hotspot r5 c2" href="tempest.html"   aria-label="Tempest"></a>
     <a class="hotspot r5 c3" href="timepilot.html" aria-label="Time Pilot"></a>
   </div>
+
+  <!-- Prev / Next page navigation -->
+  <a class="arrow arrow-left"
+     href="https://djm3n4c3.github.io/mamehub2/index.html"
+     aria-label="Previous page">
+    <img src="prev.png" alt="Previous page">
+  </a>
+
+  <a class="arrow arrow-right"
+     href="https://djm3n4c3.github.io/mamehub1/index.html"
+     aria-label="Next page">
+    <img src="next.png" alt="Next page">
+  </a>
 
 </body>
 </html>
