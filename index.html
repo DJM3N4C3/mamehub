@@ -17,19 +17,19 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* The stage holds the artwork and its hotspots.
+  /* The stage holds the artwork, hotspots, AND arrows.
      Reserves 320px total (160px each side) for the arrows. */
   #stage {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width:  min(calc(100vw - 320px), calc(100vh * 0.7384));   /* 1084 / 1468 ≈ 0.7384 */
-    height: min(100vh, calc((100vw - 320px) * 1.3542));       /* 1468 / 1084 ≈ 1.3542 */
+    width:  min(calc(100vw - 320px), calc(100vh * 0.7384));
+    height: min(100vh, calc((100vw - 320px) * 1.3542));
   }
 
   /* Artwork fills the stage */
-  #stage img {
+  #stage > img {
     width: 100%;
     height: 100%;
     display: block;
@@ -37,9 +37,11 @@
     user-select: none;
   }
 
-  /* ---- Prev / Next neon chevron arrows ---- */
+  /* ---- Prev / Next neon chevron arrows ----
+     Now positioned RELATIVE to the stage, not the viewport,
+     so they always sit right beside the game grid. */
   .arrow {
-    position: fixed;
+    position: absolute;
     top: 50%;
     transform: translateY(-50%);
     width: 100px;
@@ -71,19 +73,26 @@
     transform: translateY(-50%) scale(0.95);
   }
 
-  /* Inset 40px from the screen edges so they sit near the grid, not at the edge */
-  .arrow-left  { left: 40px; }
-  .arrow-right { right: 40px; }
+  /* Glue the arrows to the outside edges of the stage with a small gap.
+     "right: 100%" means "start at the left edge of the stage."
+     Then margin-right pulls it further left by 20px. */
+  .arrow-left {
+    right: 100%;
+    margin-right: 20px;
+  }
+
+  .arrow-right {
+    left: 100%;
+    margin-left: 20px;
+  }
 
   /* ---- Grid coordinates (percentages of the image) ---- */
   :root {
-    /* Columns */
     --c1: 3.0%;
     --c2: 35.0%;
     --c3: 67.0%;
     --cw: 30.0%;
 
-    /* Rows */
     --r1: 1.5%;
     --rp: 19.1%;
     --rh: 18.5%;
@@ -132,8 +141,8 @@
       height: min(100vh, calc((100vw - 170px) * 1.3542));
     }
     .arrow { width: 55px; }
-    .arrow-left  { left: 18px; }
-    .arrow-right { right: 18px; }
+    .arrow-left  { margin-right: 10px; }
+    .arrow-right { margin-left: 10px; }
   }
 </style>
 </head>
@@ -166,20 +175,20 @@
     <a class="hotspot r5 c1" href="pacman.html"    aria-label="Pac-Man"></a>
     <a class="hotspot r5 c2" href="tempest.html"   aria-label="Tempest"></a>
     <a class="hotspot r5 c3" href="timepilot.html" aria-label="Time Pilot"></a>
+
+    <!-- Prev / Next arrows — INSIDE the stage so they stay glued to the grid -->
+    <a class="arrow arrow-left"
+       href="https://djm3n4c3.github.io/mamehub2/index.html"
+       aria-label="Previous page">
+      <img src="prev.png" alt="Previous page">
+    </a>
+
+    <a class="arrow arrow-right"
+       href="https://djm3n4c3.github.io/mamehub1/index.html"
+       aria-label="Next page">
+      <img src="next.png" alt="Next page">
+    </a>
   </div>
-
-  <!-- Prev / Next page navigation -->
-  <a class="arrow arrow-left"
-     href="https://djm3n4c3.github.io/mamehub2/index.html"
-     aria-label="Previous page">
-    <img src="prev.png" alt="Previous page">
-  </a>
-
-  <a class="arrow arrow-right"
-     href="https://djm3n4c3.github.io/mamehub1/index.html"
-     aria-label="Next page">
-    <img src="next.png" alt="Next page">
-  </a>
 
 </body>
 </html>
